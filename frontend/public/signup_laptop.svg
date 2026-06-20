@@ -1,0 +1,40 @@
+﻿<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1200" fill="#F4F8F8"/>
+  <defs>
+    <radialGradient id="bgGlow2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(370 230) rotate(28) scale(720 580)">
+      <stop offset="0" stop-color="#D8EC63" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#D8EC63" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="screen2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F0F8F7"/>
+    </linearGradient>
+    <linearGradient id="line2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8FBFBD"/>
+      <stop offset="1" stop-color="#D8EC63"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#bgGlow2)"/>
+
+  <g transform="translate(250 250) rotate(5 560 360)">
+    <rect x="80" y="150" width="960" height="550" rx="28" fill="#0C0D10"/>
+    <rect x="108" y="178" width="904" height="490" rx="18" fill="url(#screen2)"/>
+
+    <rect x="146" y="220" width="420" height="220" rx="16" fill="#FFFFFF" stroke="#D8E9E8"/>
+    <rect x="594" y="220" width="178" height="104" rx="14" fill="#FFFFFF" stroke="#D8E9E8"/>
+    <rect x="790" y="220" width="196" height="220" rx="16" fill="#FFFFFF" stroke="#D8E9E8"/>
+
+    <path d="M176 390C220 360 274 348 330 356C388 364 434 394 526 364" stroke="url(#line2)" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="526" cy="364" r="8" fill="#D8EC63"/>
+
+    <rect x="146" y="468" width="840" height="168" rx="16" fill="#FFFFFF" stroke="#D8E9E8"/>
+    <rect x="174" y="496" width="240" height="18" rx="9" fill="#8FBFBD" fill-opacity="0.32"/>
+    <rect x="174" y="526" width="420" height="14" rx="7" fill="#8FBFBD" fill-opacity="0.2"/>
+    <rect x="174" y="550" width="360" height="14" rx="7" fill="#8FBFBD" fill-opacity="0.2"/>
+    <rect x="690" y="500" width="260" height="104" rx="14" fill="#F7FCF4" stroke="#D8EC63"/>
+
+    <rect x="130" y="700" width="860" height="52" rx="24" fill="#A9B1BB"/>
+    <rect x="298" y="710" width="520" height="30" rx="14" fill="#8B949E"/>
+  </g>
+</svg>

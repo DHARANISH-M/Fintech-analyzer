@@ -1,0 +1,251 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root, :root[data-theme="light"] {
+    --bg-page: 45 10% 94%; /* Deeper Warm Grey #f2f1ed */
+    --bg-card: 0 0% 100%; /* Surface Card #ffffff */
+    --bg-card-nested: 45 10% 96%; /* Nested Cards #f7f6f3 */
+    --bg-sidebar: 48 20% 98%; /* Sidebar #fafaf7 */
+    --border-color: 45 6% 89%; /* Border #e8e6e1 */
+    --text-primary: 48 10% 13%; /* Foreground #26251e */
+    --text-secondary: 40 4% 34%; /* Body #5a5852 */
+    --text-muted: 45 6% 47%; /* Muted #807d72 */
+    --accent-orange: 19 100% 48%; /* Brand #f54e00 */
+    --accent-green: 157 63% 33%; /* Success #1f8a65 */
+    --accent-red: 345 64% 49%; /* Error #cf2d56 */
+
+    /* Keep Tailwind variables mapped to HSL custom properties */
+    --background: var(--bg-page);
+    --foreground: var(--text-primary);
+    --card: var(--bg-card);
+    --card-foreground: var(--text-secondary);
+    --popover: var(--bg-card);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent-orange);
+    --primary-foreground: var(--bg-card);
+    --secondary: var(--bg-sidebar);
+    --secondary-foreground: var(--accent-orange);
+    --muted: var(--text-muted);
+    --muted-foreground: 45 5% 60%;
+    --accent: var(--accent-orange);
+    --accent-foreground: var(--bg-card);
+    --destructive: var(--accent-red);
+    --destructive-foreground: var(--bg-card);
+    --border: var(--border-color);
+    --input: var(--border-color);
+    --ring: var(--accent-orange);
+    --radius: 8px;
+
+    --sidebar-background: var(--bg-sidebar);
+    --sidebar-foreground: var(--text-primary);
+    --sidebar-primary: var(--accent-orange);
+    --sidebar-primary-foreground: var(--bg-card);
+    --sidebar-accent: var(--bg-card);
+    --sidebar-accent-foreground: var(--text-primary);
+    --sidebar-border: var(--border-color);
+    --sidebar-ring: var(--accent-orange);
+
+    /* Cursor Custom Colors */
+    --canvas-soft: #fafaf7;
+    --hairline-soft: #efeee8;
+    --hairline-strong: #cfcdc4;
+
+    /* Sub blocks */
+    --sub-card: var(--bg-card-nested);
+    --sub-border: var(--border-color);
+
+    /* Success indicator */
+    --success: var(--accent-green);
+  }
+
+  :root[data-theme="dark"] {
+    --bg-page: 240 5% 7%; /* #121212 */
+    --bg-card: 240 4% 13%; /* #1e1e22 */
+    --bg-card-nested: 240 4% 10%; /* #16161a */
+    --bg-sidebar: 240 4% 11%; /* #17171b */
+    --border-color: 240 4% 18%; /* #2a2a2e */
+    --text-primary: 0 0% 94%; /* #f0f0f0 */
+    --text-secondary: 0 0% 60%; /* #9a9a9a */
+    --text-muted: 240 4% 50%; /* #807d72 */
+    --accent-orange: 24 95% 61%; /* #fb923c */
+    --accent-green: 142 72% 58%; /* #4ade80 */
+    --accent-red: 0 84% 68%; /* #f87171 */
+
+    /* Keep Tailwind variables mapped to HSL custom properties */
+    --background: var(--bg-page);
+    --foreground: var(--text-primary);
+    --card: var(--bg-card);
+    --card-foreground: var(--text-secondary);
+    --popover: var(--bg-card);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent-orange);
+    --primary-foreground: var(--bg-card);
+    --secondary: var(--bg-sidebar);
+    --secondary-foreground: var(--accent-orange);
+    --muted: var(--text-muted);
+    --muted-foreground: 240 4% 40%;
+    --accent: var(--accent-orange);
+    --accent-foreground: var(--bg-card);
+    --destructive: var(--accent-red);
+    --destructive-foreground: var(--bg-card);
+    --border: var(--border-color);
+    --input: var(--border-color);
+    --ring: var(--accent-orange);
+    --radius: 8px;
+
+    --sidebar-background: var(--bg-sidebar);
+    --sidebar-foreground: var(--text-primary);
+    --sidebar-primary: var(--accent-orange);
+    --sidebar-primary-foreground: var(--bg-card);
+    --sidebar-accent: var(--bg-card);
+    --sidebar-accent-foreground: var(--text-primary);
+    --sidebar-border: var(--border-color);
+    --sidebar-ring: var(--accent-orange);
+
+    /* Cursor Custom Colors */
+    --canvas-soft: #17171b;
+    --hairline-soft: #252528;
+    --hairline-strong: #323235;
+
+    /* Sub blocks */
+    --sub-card: var(--bg-card-nested);
+    --sub-border: var(--border-color);
+
+    /* Success indicator */
+    --success: var(--accent-green);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body, aside, header, main, article, section, div, button, select, input, label, table, tr, td, th, p, span, h1, h2, h3, h4, h5, h6, a {
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Display weight stays at 400. Magazine voice, never bold. Negative letter-spacing on display headings. */
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    text-transform: none !important;
+    font-weight: 400 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  :where(p, span, li, a, button, label, td, th) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  pre,
+  code,
+  .font-mono {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    overflow-x: auto;
+    white-space: pre;
+  }
+}
+
+@layer components {
+  /* Signature Cursor Orange CTA (Rounded 8px, 14px 500 type) */
+  .cursor-btn-primary {
+    @apply inline-flex items-center justify-center bg-[#f54e00] text-white font-medium text-sm px-[18px] py-2.5 h-10 transition-colors duration-150 hover:bg-[#d04200] focus:outline-none focus:ring-2 focus:ring-[#f54e00]/40;
+    border-radius: 8px !important;
+  }
+
+  /* Secondary Button (White card, hairline-strong border, 8px rounded) */
+  .cursor-btn-secondary {
+    @apply inline-flex items-center justify-center bg-white text-[#26251e] font-medium text-sm px-[18px] py-2.5 h-10 border border-[#cfcdc4] transition-colors duration-150 hover:bg-[#fafaf7] focus:outline-none;
+    border-radius: 8px !important;
+  }
+
+  /* Download Button (Ink-canvas style, h-11, 20px padding) */
+  .cursor-btn-download {
+    @apply inline-flex items-center justify-center bg-[#26251e] text-[#f7f7f4] font-medium text-sm px-5 py-3 h-11 transition-opacity duration-150 hover:opacity-90 focus:outline-none;
+    border-radius: 8px !important;
+  }
+
+  /* Inline ink text link */
+  .cursor-text-link {
+    @apply inline-flex items-center gap-1 text-[#26251e] font-semibold text-sm transition-colors hover:text-[#f54e00];
+  }
+
+  /* Custom input styling */
+  .cursor-input {
+    @apply w-full rounded-md border border-[#e8e6e1] bg-white px-4 py-2.5 text-sm text-[#26251e] placeholder-[#a09c92] transition outline-none focus:border-[#f54e00];
+    border-radius: 8px !important;
+    height: 44px;
+  }
+
+  /* Timeline Pills (AI Action stages) */
+  .timeline-pill-thinking {
+    @apply inline-flex items-center justify-center bg-[#dfa88f] text-[#26251e] text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full;
+  }
+
+  .timeline-pill-grep {
+    @apply inline-flex items-center justify-center bg-[#9fc9a2] text-[#26251e] text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full;
+  }
+
+  .timeline-pill-read {
+    @apply inline-flex items-center justify-center bg-[#9fbbe0] text-[#26251e] text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full;
+  }
+
+  .timeline-pill-edit {
+    @apply inline-flex items-center justify-center bg-[#c0a8dd] text-[#26251e] text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full;
+  }
+
+  .timeline-pill-done {
+    @apply inline-flex items-center justify-center bg-[#c08532] text-white text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full;
+  }
+
+  /* Premium Card style with mild elevation hierarchy */
+  .cursor-card {
+    background-color: hsl(var(--bg-card)) !important;
+    border: 1px solid hsl(var(--border-color)) !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06) !important;
+    border-radius: 12px !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  :root[data-theme="dark"] .cursor-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Custom scrollbar styling respecting theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--bg-page));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border-color));
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--text-muted));
+  }
+  
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border-color)) hsl(var(--bg-page));
+  }
+
+  html, body {
+    overflow-x: hidden;
+  }
+}
