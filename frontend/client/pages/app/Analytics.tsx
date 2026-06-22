@@ -738,7 +738,7 @@ export default function Analytics() {
 
   return (
     <div className="space-y-8 pb-16 font-sans">
-      <section className="cursor-card p-8">
+      {/* <section className="cursor-card p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
             <p className="text-[10px] font-bold uppercase tracking-wider text-primary">FINANCE INTELLIGENCE</p>
@@ -752,7 +752,7 @@ export default function Analytics() {
             <p className="mt-1 text-2xl font-heading font-normal text-foreground font-mono">{analyticsView?.metrics.transactionCount ?? 0}</p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Central Date Filtering */}
       <section className="border border-sub-border bg-sub-card p-6 rounded-lg shadow-sm">
