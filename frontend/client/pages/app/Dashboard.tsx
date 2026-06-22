@@ -509,7 +509,7 @@ export default function Dashboard() {
         <div className="flex items-end justify-between">
           <div>
             <h2 className="font-heading text-lg font-normal text-foreground">Recently uploaded documents</h2>
-            <p className="text-xs text-muted-foreground font-light">Latest statements added to your workspace.</p>
+            {/* <p className="text-xs text-muted-foreground font-light">Latest statements added to your workspace.</p> */}
           </div>
           <Link
             to="/enhanced/documents"
