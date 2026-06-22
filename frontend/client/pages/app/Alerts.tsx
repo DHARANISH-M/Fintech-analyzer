@@ -33,13 +33,13 @@ export default function Alerts() {
 
   return (
     <div className="space-y-6 pb-16 font-sans">
-      <section className="cursor-card p-8">
+      {/* <section className="cursor-card p-8">
         <p className="text-[10px] font-bold uppercase tracking-wider text-primary">SYSTEM REVIEW</p>
         <h1 className="mt-2 text-3xl font-heading font-normal tracking-tight text-foreground">Alerts</h1>
         <p className="mt-2 text-sm leading-relaxed text-card-foreground font-light">
           Anomalies, expense spikes, and review items derived automatically from the extracted transactions.
         </p>
-      </section>
+      </section> */}
 
       {isLoading && <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground">Loading alerts...</p>}
       {error && (

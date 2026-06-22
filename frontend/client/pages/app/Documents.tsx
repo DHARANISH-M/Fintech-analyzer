@@ -129,7 +129,7 @@ export default function Documents() {
 
   return (
     <div className="space-y-6 font-sans pb-16">
-      <section className="cursor-card p-8">
+      {/* <section className="cursor-card p-8">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-primary">FILE REPOSITORY</p>
@@ -143,7 +143,7 @@ export default function Documents() {
             {processedCount} ANALYZED
           </div>
         </div>
-      </section>
+      </section> */}
 
       <input
         ref={fileInputRef}
