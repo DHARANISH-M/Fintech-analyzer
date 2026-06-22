@@ -1,25 +1,25 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  TrendingDown, 
-  TrendingUp, 
-  Wallet, 
-  UploadCloud, 
-  AlertTriangle, 
-  CheckCircle2, 
-  ArrowRight, 
+import {
+  TrendingDown,
+  TrendingUp,
+  Wallet,
+  UploadCloud,
+  AlertTriangle,
+  CheckCircle2,
+  ArrowRight,
   Download,
   FileText
 } from "lucide-react";
 
 import { DashboardResponse, DocumentRecord, TransactionRecord } from "@shared/api";
-import { 
-  fetchDashboard, 
-  fetchDocuments, 
-  fetchTransactions, 
-  fetchAlerts, 
-  downloadDocumentSpreadsheet, 
-  formatMoney 
+import {
+  fetchDashboard,
+  fetchDocuments,
+  fetchTransactions,
+  fetchAlerts,
+  downloadDocumentSpreadsheet,
+  formatMoney
 } from "@/lib/finance-api";
 
 function StatCard({
@@ -51,7 +51,7 @@ function StatCard({
 
   const isNegative = delta !== undefined && delta !== null && delta < 0;
   const showDelta = delta !== undefined && delta !== null && !isNaN(delta);
-  
+
   let deltaColorClass = "text-success";
   if (tone === "danger") {
     deltaColorClass = isNegative ? "text-success" : "text-destructive";
@@ -59,8 +59,8 @@ function StatCard({
     deltaColorClass = isNegative ? "text-destructive" : "text-success";
   }
 
-  const deltaText = showDelta 
-    ? `${isNegative ? "↓" : "↑"} ${Math.abs(delta).toFixed(1)}% vs last month` 
+  const deltaText = showDelta
+    ? `${isNegative ? "↓" : "↑"} ${Math.abs(delta).toFixed(1)}% vs last month`
     : "";
 
   return (
@@ -89,13 +89,13 @@ function StatCard({
 function getRelativeTime(dateString: string): string {
   const targetDate = new Date(dateString);
   const now = new Date();
-  
+
   const targetMidnight = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
   const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  
+
   const diffTime = nowMidnight.getTime() - targetMidnight.getTime();
   const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-  
+
   if (diffDays === 0) return "today";
   if (diffDays === 1) return "yesterday";
   if (diffDays < 0) return "in the future";
@@ -201,9 +201,9 @@ export default function Dashboard() {
   // Command Center 1: Action Needed Banner
   const bannerItems = useMemo(() => {
     if (isLoading || docsData.length === 0) return [];
-    
+
     const items: Array<{ text: string; link: string; type: "warning" | "info" | "neutral" }> = [];
-    
+
     // Transactions needing categorization
     const uncategorizedCount = transactions.filter(
       t => !t.category || t.category.toLowerCase() === "uncategorized"
@@ -237,7 +237,7 @@ export default function Dashboard() {
       const latestDoc = sortedDocs[0];
       const diffTime = Math.abs(new Date().getTime() - new Date(latestDoc.uploadedAt).getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
+
       if (diffDays > 7) {
         items.push({
           text: `Last statement uploaded ${diffDays} days ago — may be outdated`,
@@ -256,7 +256,7 @@ export default function Dashboard() {
     const docsCount = docsData.length;
     const txCount = transactions.length;
     const accountsCount = new Set(transactions.map(t => t.documentId)).size || docsCount;
-    
+
     return `${docsCount} statement${docsCount === 1 ? "" : "s"} · ${accountsCount} account${accountsCount === 1 ? "" : "s"} · ${txCount} transaction${txCount === 1 ? "" : "s"} tracked`;
   }, [docsData, transactions]);
 
@@ -287,7 +287,7 @@ export default function Dashboard() {
   // Command Center 4: Account Balances List
   const accountBalances = useMemo(() => {
     if (docsData.length <= 1) return [];
-    
+
     return docsData.map(doc => {
       const docTxs = transactions.filter(t => t.documentId === doc.id);
       const sorted = [...docTxs].sort(
@@ -392,59 +392,55 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8 pb-16 font-sans">
-      
-      {/* Overview header block with integrated Quick Actions & Stats Strip */}
-      <section className="cursor-card p-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-2xl space-y-1">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">OVERVIEW & METRICS</p>
-            <h1 className="text-3xl font-heading font-normal tracking-tight text-foreground">Dashboard</h1>
-            <p className="text-sm leading-relaxed text-card-foreground font-light">
-              A precise visual audit of closing statement balances, monthly net cash positions, and normalized payees.
+
+      {/* Quick Actions & Overview Info Row — flat and correctly aligned */}
+      <section className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-1">
+        <div className="space-y-1">
+          {/* <p className="text-sm text-muted-foreground font-light">
+            A precise visual audit of closing statement balances, monthly net cash positions, and normalized payees.
+          </p> */}
+          {/* {statsStrip && (
+            <p className="text-[11px] text-muted-foreground font-mono">
+              {statsStrip}
             </p>
-            {statsStrip && (
-              <p className="text-[11px] text-muted-foreground font-mono pt-1">
-                {statsStrip}
-              </p>
-            )}
-          </div>
-          
-          {/* Quick Actions Row */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            <Link
-              to="/enhanced/documents"
-              className="inline-flex items-center gap-1.5 border border-border bg-card hover:bg-sub-card/80 px-3.5 py-2 text-xs font-semibold text-foreground rounded-md shadow-sm transition-colors"
-            >
-              <UploadCloud className="h-3.5 w-3.5 text-primary" />
-              <span>Upload statement</span>
-            </Link>
-            
-            <Link
-              to="/enhanced/alerts"
-              className="inline-flex items-center gap-1.5 border border-border bg-card hover:bg-sub-card/80 px-3.5 py-2 text-xs font-semibold text-foreground rounded-md shadow-sm transition-colors"
-            >
-              <AlertTriangle className="h-3.5 w-3.5 text-primary" />
-              <span>Review alerts</span>
-              {alertsCount > 0 && (
-                <span className="ml-1 bg-primary text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-                  {alertsCount}
-                </span>
-              )}
-            </Link>
-            
-            <button
-              onClick={handleExportLatest}
-              className="inline-flex items-center gap-1.5 border border-border bg-card hover:bg-sub-card/80 px-3.5 py-2 text-xs font-semibold text-foreground rounded-md shadow-sm transition-colors"
-            >
-              <Download className="h-3.5 w-3.5 text-primary" />
-              <span>Export this period</span>
-            </button>
-          </div>
+          )} */}
         </div>
+
+        {/* Quick Actions Row */}
+        {/* <div className="flex flex-wrap items-center gap-2.5">
+          <Link
+            to="/enhanced/documents"
+            className="inline-flex items-center gap-1.5 border border-border bg-card hover:bg-sub-card/80 px-3.5 py-2 text-xs font-semibold text-foreground rounded-md shadow-sm transition-colors"
+          >
+            <UploadCloud className="h-3.5 w-3.5 text-primary" />
+            <span>Upload statement</span>
+          </Link>
+
+          <Link
+            to="/enhanced/alerts"
+            className="inline-flex items-center gap-1.5 border border-border bg-card hover:bg-sub-card/80 px-3.5 py-2 text-xs font-semibold text-foreground rounded-md shadow-sm transition-colors"
+          >
+            <AlertTriangle className="h-3.5 w-3.5 text-primary" />
+            <span>Review alerts</span>
+            {alertsCount > 0 && (
+              <span className="ml-1 bg-primary text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                {alertsCount}
+              </span>
+            )}
+          </Link>
+
+          <button
+            onClick={handleExportLatest}
+            className="inline-flex items-center gap-1.5 border border-border bg-card hover:bg-sub-card/80 px-3.5 py-2 text-xs font-semibold text-foreground rounded-md shadow-sm transition-colors"
+          >
+            <Download className="h-3.5 w-3.5 text-primary" />
+            <span>Export this period</span>
+          </button>
+        </div> */}
       </section>
 
       {/* Action Needed Banner */}
-      <section className="cursor-card overflow-hidden">
+      {/* <section className="cursor-card overflow-hidden">
         <div className="border-l-4 border-primary bg-primary/5 px-6 py-4">
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -471,7 +467,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Stat Cards Grid */}
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -613,7 +609,7 @@ export default function Dashboard() {
 
       {/* Side by side CSS Grid (Payee Ledger and Recent Activity) */}
       <section className="grid gap-6 md:grid-cols-2 items-stretch">
-        
+
         {/* Payee Ledger */}
         <article className="cursor-card p-6 flex flex-col justify-between h-full">
           <div>
@@ -723,8 +719,8 @@ export default function Dashboard() {
                 <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground">No recent activity logged.</p>
               ) : (
                 sortedRecent.map((transaction) => (
-                  <div 
-                    key={transaction.id} 
+                  <div
+                    key={transaction.id}
                     className="flex items-center justify-between gap-4 border border-border bg-card px-4 py-3.5 hover:border-sub-border hover:bg-sub-card/50 transition-all duration-150 rounded-md shadow-sm"
                   >
                     <div className="min-w-0">
