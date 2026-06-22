@@ -49,13 +49,13 @@ export default function Transactions() {
 
   return (
     <div className="space-y-6 pb-16 font-sans">
-      <section className="cursor-card p-8">
+      {/* <section className="cursor-card p-8">
         <p className="text-[10px] font-bold uppercase tracking-wider text-primary">SQL ledger</p>
         <h1 className="mt-2 text-3xl font-heading font-normal tracking-tight text-foreground">Transactions</h1>
         <p className="mt-2 text-sm leading-relaxed text-card-foreground font-light">
           Browse and filter extracted transaction records with custom categorizations and confidence ratings.
         </p>
-      </section>
+      </section> */}
 
       {/* Filter panel */}
       <div className="grid gap-4 border border-sub-border bg-sub-card p-4 md:grid-cols-[1.6fr_0.7fr_0.7fr] rounded-lg shadow-sm">
