@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -13,7 +13,7 @@ import {
   Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { fetchDocuments, fetchTransactions, fetchAlerts } from "@/lib/finance-api";
+import { useAppState } from "@/hooks/useAppState";
 
 interface SidebarProps {
   onCloseMobile?: () => void;
@@ -21,51 +21,8 @@ interface SidebarProps {
 
 export function Sidebar({ onCloseMobile }: SidebarProps) {
   const location = useLocation();
-  const [docCount, setDocCount] = useState(1);
-  const [txCount, setTxCount] = useState(22);
-  const [alertCount, setAlertCount] = useState(3);
-  
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    return (localStorage.getItem("theme") as "light" | "dark") || "light";
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
-    localStorage.setItem("theme", nextTheme);
-    document.documentElement.setAttribute("data-theme", nextTheme);
-  };
-
-  // Load counts dynamically
-  const loadCounts = async () => {
-    try {
-      const { documents } = await fetchDocuments();
-      setDocCount(documents.length);
-
-      const { transactions } = await fetchTransactions();
-      setTxCount(transactions.length);
-
-      const { alerts } = await fetchAlerts();
-      setAlertCount(alerts.length);
-    } catch (e) {
-      console.error("Failed to load sidebar counts:", e);
-    }
-  };
-
-  useEffect(() => {
-    void loadCounts();
-    // Refresh numbers whenever document changes
-    window.addEventListener("storage", loadCounts);
-    window.addEventListener("document-change", loadCounts);
-    return () => {
-      window.removeEventListener("storage", loadCounts);
-      window.removeEventListener("document-change", loadCounts);
-    };
-  }, []);
+  const { alertCount, docCount, txCount, theme, toggleTheme, userName, userInitials } =
+    useAppState();
 
   const handleNotificationClick = () => {
     toast.message("Notifications Inbox", {
@@ -76,7 +33,7 @@ export function Sidebar({ onCloseMobile }: SidebarProps) {
   return (
     <aside className="w-full md:w-[270px] bg-sidebar border-r border-sidebar-border h-full flex flex-col font-sans select-none relative">
       {/* 1. HEADER / STATIC WORKSPACE TITLE */}
-      <div className="border-b border-sidebar-border px-4 py-3.5 flex items-center justify-between">
+      <div className="px-4 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
           {/* Logo Icon */}
           <div className="w-6 h-6 bg-primary text-primary-foreground rounded flex items-center justify-center font-bold text-xs flex-shrink-0">
@@ -145,8 +102,6 @@ export function Sidebar({ onCloseMobile }: SidebarProps) {
 
       </div>
 
-      {/* 5. SPACER -> handled by flex layout container */}
-
       {/* 6. FOOTER BLOCK (stacked at bottom) */}
       <div className="border-t border-sidebar-border p-3 space-y-3 bg-sidebar flex-shrink-0">
         
@@ -188,11 +143,11 @@ export function Sidebar({ onCloseMobile }: SidebarProps) {
           <div className="flex items-center gap-2.5 min-w-0">
             {/* Avatar */}
             <div className="w-8 h-8 rounded-full bg-sub-card border border-sub-border text-foreground font-semibold text-xs flex items-center justify-center uppercase flex-shrink-0">
-              DS
+              {userInitials}
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold text-foreground truncate leading-tight">
-                {localStorage.getItem("user_name") || "Deepan S."}
+                {userName}
               </p>
               <div className="flex items-center gap-1 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-success" />
