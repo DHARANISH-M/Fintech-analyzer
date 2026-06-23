@@ -71,7 +71,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       </AnimatePresence>
 
       {/* 4. Main content column — right of sidebar on desktop */}
-      <div className="flex-1 min-h-screen flex flex-col pt-[56px] md:pt-0 md:pl-[270px]">
+      <div className="flex-1 h-screen flex flex-col pt-[56px] md:pt-0 md:pl-[270px] overflow-hidden">
         {/* Desktop TopBar — sticky at top of content column, hidden on mobile */}
         <TopBar />
 
