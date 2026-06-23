@@ -245,6 +245,13 @@
     scrollbar-color: hsl(var(--border-color)) hsl(var(--bg-page));
   }
 
+  input, select {
+    scrollbar-width: none !important;
+  }
+  input::-webkit-scrollbar, select::-webkit-scrollbar {
+    display: none !important;
+  }
+
   html, body {
     overflow-x: hidden;
   }
