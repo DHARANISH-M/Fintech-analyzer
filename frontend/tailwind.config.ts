@@ -25,6 +25,12 @@ export default {
         sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
       },
+      spacing: {
+        "6": "1.0rem",   // Tightens gap-6 / space-y-6 from 24px to 16px
+        "8": "1.25rem",  // Tightens space-y-8 / gap-8 from 32px to 20px
+        "16": "2.0rem",  // Tightens bottom padding pb-16 from 64px to 32px
+        "20": "2.5rem",  // Tightens bottom padding pb-20 from 80px to 40px
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

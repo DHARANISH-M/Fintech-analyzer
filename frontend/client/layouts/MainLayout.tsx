@@ -10,7 +10,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row relative font-sans">
+    <div className="h-screen w-screen overflow-hidden bg-background text-foreground flex flex-col md:flex-row relative font-sans">
 
       {/* 1. Desktop Fixed Sidebar */}
       <div className="hidden md:block fixed top-0 left-0 bottom-0 h-full w-[270px] z-30 flex-shrink-0">
@@ -71,12 +71,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       </AnimatePresence>
 
       {/* 4. Main content column — right of sidebar on desktop */}
-      <div className="flex-1 h-screen flex flex-col pt-[56px] md:pt-0 md:pl-[270px] overflow-hidden">
+      <div className="flex-1 h-full flex flex-col pt-[56px] md:pt-0 md:pl-[270px] overflow-hidden">
         {/* Desktop TopBar — sticky at top of content column, hidden on mobile */}
         <TopBar />
 
         {/* Scrollable page content */}
-        <main className="flex-1 overflow-y-auto pb-16 px-4 md:px-8 pt-6">
+        <main className="flex-1 overflow-y-auto pb-6 px-4 md:px-8 pt-6">
           <div className="max-w-[1200px] w-full mx-auto flex-1 flex flex-col">
             <AnimatePresence mode="wait">
               <motion.div

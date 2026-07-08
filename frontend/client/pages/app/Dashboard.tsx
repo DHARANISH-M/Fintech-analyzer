@@ -391,7 +391,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-8 pb-16 font-sans">
+    <div className="space-y-6 pb-8 font-sans">
 
       {/* Quick Actions & Overview Info Row — flat and correctly aligned */}
       <section className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between px-1">

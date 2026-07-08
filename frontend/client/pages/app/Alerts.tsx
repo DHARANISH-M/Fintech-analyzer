@@ -3,6 +3,7 @@ import { AlertTriangle, CheckCircle2 } from "lucide-react";
 
 import { AlertsResponse } from "@shared/api";
 import { fetchAlerts } from "@/lib/finance-api";
+import Loader from "@/components/Loader";
 
 const severityTone: Record<string, string> = {
   high: "border-destructive/25 bg-destructive/5 text-destructive",
@@ -41,7 +42,12 @@ export default function Alerts() {
         </p>
       </section> */}
 
-      {isLoading && <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground">Loading alerts...</p>}
+      {isLoading && (
+        <div className="flex flex-col items-center justify-center p-12">
+          <Loader size="md" />
+          <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground mt-4">Loading alerts...</p>
+        </div>
+      )}
       {error && (
         <div className="border border-destructive/25 bg-destructive/5 px-6 py-4 text-xs font-bold text-destructive uppercase tracking-wide rounded-md">
           {error}

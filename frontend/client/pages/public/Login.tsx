@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import Loader from '@/components/Loader';
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -45,7 +46,15 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-card-foreground p-4 md:p-8 flex items-center justify-center font-sans">
+    <div className="min-h-screen bg-background text-card-foreground p-4 md:p-8 flex items-center justify-center font-sans relative">
+      {loading && (
+        <div className="fixed inset-0 bg-background/70 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <Loader size="lg" />
+          <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground mt-4 animate-pulse">
+            Signing you in...
+          </p>
+        </div>
+      )}
       <div className="max-w-[1000px] w-full min-h-[580px] overflow-hidden border border-border bg-card grid md:grid-cols-2 shadow-none rounded-lg">
         
         {/* Left Form Panel (Pure White) */}

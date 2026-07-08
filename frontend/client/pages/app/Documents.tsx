@@ -3,6 +3,7 @@ import { Download, FileText, Loader2, ShieldCheck, Trash2, UploadCloud } from "l
 
 import { DocumentRecord } from "@shared/api";
 import { buildUserId, deleteDocument, fetchDocuments, downloadDocumentSpreadsheet } from "@/lib/finance-api";
+import Loader from "@/components/Loader";
 
 function formatSize(bytes: number) {
   if (bytes >= 1024 * 1024) {
@@ -128,7 +129,15 @@ export default function Documents() {
   };
 
   return (
-    <div className="space-y-6 font-sans pb-16">
+    <div className="space-y-6 font-sans pb-8 relative">
+      {isUploading && (
+        <div className="fixed inset-0 bg-background/70 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <Loader size="lg" />
+          <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground mt-4 animate-pulse">
+            Uploading and parsing PDF statement...
+          </p>
+        </div>
+      )}
       {/* <section className="cursor-card p-8">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
@@ -182,7 +191,12 @@ export default function Documents() {
           Uploaded Documents
         </div>
         <div className="space-y-3 p-6 bg-card">
-          {isLoading && <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground">Loading documents...</p>}
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center p-8">
+              <Loader size="md" />
+              <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground mt-4">Loading documents...</p>
+            </div>
+          )}
           {!isLoading && documents.length === 0 && (
             <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground">No PDFs uploaded yet.</p>
           )}

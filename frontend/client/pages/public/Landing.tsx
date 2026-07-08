@@ -19,15 +19,21 @@ export default function Landing() {
           <div className="flex items-center gap-6">
             <Link 
               to="/enhanced/login" 
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+              className="animated-login-btn"
             >
-              Sign in
+              <span>Sign in</span>
             </Link>
             <Link
               to="/enhanced/signup"
-              className="cursor-btn-primary"
+              className="get-started-btn"
             >
-              Get Started
+              Get started
+              <div className="icon">
+                <svg height={24} width={24} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor" />
+                </svg>
+              </div>
             </Link>
           </div>
         </div>
@@ -36,16 +42,16 @@ export default function Landing() {
       {/* 2. Sub-Nav Bar (Cursor secondary style) */}
       <div className="fixed top-[64px] left-0 w-full h-[56px] bg-background border-b border-border z-40 flex items-center justify-between px-6">
         <div className="max-w-[1200px] mx-auto w-full flex items-center justify-between">
-          <Link to="/enhanced" className="font-heading text-sm font-normal text-foreground tracking-normal">
+          {/* <Link to="/enhanced" className="font-heading text-sm font-normal text-foreground tracking-normal">
             Statement analyzer
-          </Link>
+          </Link> */}
           <div className="flex items-center gap-6">
-            <Link 
+            {/* <Link 
               to="/enhanced/login" 
               className="text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
             >
               Live Demo
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

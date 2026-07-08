@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Bell, ChevronDown, LogOut, Settings, User } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -134,6 +134,7 @@ function ProfileDropdown({
   onClose,
 }: ProfileDropdownProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -185,8 +186,16 @@ function ProfileDropdown({
       <div className="border-t border-border py-1">
         <button
           onClick={() => {
+            localStorage.removeItem("auth_token");
+            localStorage.removeItem("user_name");
+            localStorage.removeItem("user_username");
+            localStorage.removeItem("user_email");
+            localStorage.removeItem("user_phone");
+            localStorage.removeItem("user_currency");
+            
             toast.message("Signed out", { description: "You have been signed out." });
             onClose();
+            navigate("/enhanced");
           }}
           className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors text-left"
         >

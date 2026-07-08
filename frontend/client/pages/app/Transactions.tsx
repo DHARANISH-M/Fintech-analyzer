@@ -3,6 +3,7 @@ import { Search, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { TransactionRecord } from "@shared/api";
 import { fetchTransactions, formatMoney } from "@/lib/finance-api";
+import Loader from "@/components/Loader";
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
@@ -117,7 +118,12 @@ export default function Transactions() {
         </div>
       </div>
 
-      {isLoading && <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground">Loading transactions...</p>}
+      {isLoading && (
+        <div className="flex flex-col items-center justify-center p-12">
+          <Loader size="md" />
+          <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground mt-4">Loading transactions...</p>
+        </div>
+      )}
       {error && (
         <div className="border border-destructive/25 bg-destructive/5 px-6 py-4 text-xs font-bold text-destructive uppercase tracking-wide rounded-md">
           {error}

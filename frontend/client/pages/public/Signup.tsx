@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, Phone, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import Loader from '@/components/Loader';
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,10 +11,7 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [strength, setStrength] = useState(0);
   const [fullName, setFullName] = useState('');
-  const [username, setUsername] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
-  const [currency, setCurrency] = useState('₹');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
@@ -53,11 +51,8 @@ export default function Signup() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: fullName,
-          username,
           email,
           password,
-          phone: phoneNumber,
-          currency,
         }),
       });
 
@@ -68,10 +63,7 @@ export default function Signup() {
       }
 
       localStorage.setItem('user_name', fullName || 'User');
-      localStorage.setItem('user_username', username);
       localStorage.setItem('user_email', email);
-      localStorage.setItem('user_phone', phoneNumber);
-      localStorage.setItem('user_currency', currency);
 
       setSuccess('Account created successfully. Please sign in.');
       setTimeout(() => navigate('/enhanced/login'), 800);
@@ -84,7 +76,15 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-card-foreground p-4 md:p-8 flex items-center justify-center font-sans">
+    <div className="min-h-screen bg-background text-card-foreground p-4 md:p-8 flex items-center justify-center font-sans relative">
+      {loading && (
+        <div className="fixed inset-0 bg-background/70 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+          <Loader size="lg" />
+          <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground mt-4 animate-pulse">
+            Creating your workspace...
+          </p>
+        </div>
+      )}
       <div className="max-w-[1000px] w-full min-h-[600px] overflow-hidden border border-border bg-card grid md:grid-cols-2 shadow-none rounded-lg">
         
         {/* Left Form Panel (Pure White) */}
@@ -118,29 +118,7 @@ export default function Signup() {
                 />
               </div>
 
-              <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Username"
-                  className="cursor-input pl-10"
-                />
-              </div>
 
-              <div className="relative">
-                <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <input
-                  type="tel"
-                  required
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="Phone number"
-                  className="cursor-input pl-10"
-                />
-              </div>
 
               <div className="relative">
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -211,29 +189,7 @@ export default function Signup() {
                 </button>
               </div>
 
-              <div>
-                <label className="block text-[9px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">Preferred Currency</label>
-                <div className="grid grid-cols-4 gap-2">
-                  {[
-                    { label: 'INR (₹)', value: '₹' },
-                    { label: 'USD ($)', value: '$' },
-                    { label: 'EUR (€)', value: '€' },
-                    { label: 'GBP (£)', value: '£' },
-                  ].map((c) => (
-                    <button
-                      key={c.value}
-                      type="button"
-                      onClick={() => setCurrency(c.value)}
-                      className={`h-9 text-[10px] font-semibold border transition rounded-md ${currency === c.value
-                        ? 'bg-primary text-primary-foreground border-primary'
-                        : 'bg-card text-muted-foreground border-border hover:bg-sub-card'
-                        }`}
-                    >
-                      {c.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+
 
               <button
                 type="submit"

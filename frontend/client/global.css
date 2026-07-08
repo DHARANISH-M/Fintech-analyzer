@@ -151,11 +151,27 @@
   }
 
   pre,
-  code,
-  .font-mono {
+  code {
     font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
     overflow-x: auto;
     white-space: pre;
+  }
+
+  .font-mono {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-variant-numeric: tabular-nums !important;
+    letter-spacing: normal !important;
+  }
+
+  /* Enforce dashboard font-family & tabular figures on SVG/Recharts elements */
+  .recharts-text,
+  .recharts-legend-item-text,
+  .recharts-default-tooltip,
+  .recharts-tooltip-wrapper,
+  .recharts-cartesian-axis-tick-value,
+  svg text {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    font-variant-numeric: tabular-nums !important;
   }
 }
 
@@ -255,4 +271,184 @@
   html, body {
     overflow-x: hidden;
   }
+
+  /* Animated Login Button style matching theme */
+  .animated-login-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 38px;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--primary));
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+    z-index: 1;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .animated-login-btn::before,
+  .animated-login-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    transform: skew(15deg);
+    transition: all 0.5s ease-in-out;
+    z-index: -1;
+  }
+
+  .animated-login-btn::before {
+    left: -10px;
+    background: hsl(var(--primary));
+  }
+
+  .animated-login-btn::after {
+    right: -10px;
+    background: #d03a00; /* Darker orange */
+  }
+
+  :root[data-theme="dark"] .animated-login-btn::after {
+    background: #c2410c; /* Dark mode darker orange */
+  }
+
+  .animated-login-btn:hover::before,
+  .animated-login-btn:hover::after {
+    width: 58%;
+  }
+
+  .animated-login-btn span {
+    color: hsl(var(--primary));
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .animated-login-btn:hover span {
+    color: #ffffff;
+  }
+
+  /* Get Started button with hover icon slide animation */
+  .get-started-btn {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-family: inherit;
+    padding: 0.35em;
+    padding-left: 1.2em;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius);
+    border: none;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: inset 0 0 1.6em -0.6em hsl(var(--primary));
+    overflow: hidden;
+    position: relative;
+    height: 38px;
+    padding-right: 3.3em;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .get-started-btn .icon {
+    background: hsl(var(--primary-foreground));
+    margin-left: 1em;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.2em;
+    width: 2.2em;
+    border-radius: calc(var(--radius) - 2px);
+    box-shadow: 0.15em 0.15em 0.6em 0.05em rgba(245, 78, 0, 0.25);
+    right: 0.3em;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .get-started-btn:hover .icon {
+    width: calc(100% - 0.6em);
+  }
+
+  .get-started-btn .icon svg {
+    width: 1.1em;
+    transition: transform 0.3s ease-in-out;
+    color: hsl(var(--primary));
+  }
+
+  .get-started-btn:hover .icon svg {
+    transform: translateX(0.1em);
+  }
+
+  .get-started-btn:active .icon {
+    transform: scale(0.95);
+  }
+
+  /* Loader styling matching theme */
+  .loader {
+    width: 48px;
+    height: 48px;
+    margin: auto;
+    position: relative;
+  }
+
+  .loader:before {
+    content: '';
+    width: 48px;
+    height: 5px;
+    background: rgba(245, 78, 0, 0.18); /* Soft primary shadow */
+    position: absolute;
+    top: 60px;
+    left: 0;
+    border-radius: 50%;
+    animation: shadow324 0.5s linear infinite;
+  }
+
+  :root[data-theme="dark"] .loader:before {
+    background: rgba(251, 146, 60, 0.15); /* Soft primary shadow dark mode */
+  }
+
+  .loader:after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: hsl(var(--primary)); /* Primary orange brand color */
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 4px;
+    animation: jump7456 0.5s linear infinite;
+  }
+
+  @keyframes jump7456 {
+    15% {
+      border-bottom-right-radius: 3px;
+    }
+    25% {
+      transform: translateY(9px) rotate(22.5deg);
+    }
+    50% {
+      transform: translateY(18px) scale(1, .9) rotate(45deg);
+      border-bottom-right-radius: 40px;
+    }
+    75% {
+      transform: translateY(9px) rotate(67.5deg);
+    }
+    100% {
+      transform: translateY(0) rotate(90deg);
+    }
+  }
+
+  @keyframes shadow324 {
+    0%, 100% {
+      transform: scale(1, 1);
+    }
+    50% {
+      transform: scale(1.2, 1);
+    }
+  }
 }
+

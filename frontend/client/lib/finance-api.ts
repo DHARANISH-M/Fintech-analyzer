@@ -471,12 +471,84 @@ function initializeMockData() {
   }
 }
 
+export function seedUserMockData(userId: string) {
+  const docs = getStoredDocuments();
+  const userDocs = docs.filter((d) => d.userId === userId);
+  if (userDocs.length > 0) {
+    return;
+  }
+
+  const today = new Date();
+  const dateStart = new Date(today);
+  dateStart.setDate(today.getDate() - 30);
+
+  const nextDocId = docs.length > 0 ? Math.max(...docs.map((d) => d.id)) + 1 : 1;
+
+  const doc1: DocumentRecord = {
+    id: nextDocId,
+    userId: userId,
+    fileName: "SBI_Statement_May2026.pdf",
+    fileType: "application/pdf",
+    fileSize: 452812,
+    s3Key: `users/${userId}/documents/${nextDocId}_SBI_Statement.pdf`,
+    publicUrl: "#",
+    uploadedAt: new Date(today.getTime() - 24 * 3600 * 1000 * 12).toISOString(),
+    extractionStatus: "completed",
+    extractionError: null,
+    statementStartDate: dateStart.toISOString().slice(0, 10),
+    statementEndDate: today.toISOString().slice(0, 10),
+    transactionCount: 22
+  };
+
+  docs.push(doc1);
+  saveStoredDocuments(docs);
+
+  const txs = getStoredTransactions();
+  let currentBalance = 145000;
+  
+  for (let i = 22; i >= 0; i--) {
+    const item = mockCategories[i % mockCategories.length];
+    const txDate = new Date(today);
+    txDate.setDate(today.getDate() - i);
+    
+    const isCredit = item.dir === "credit";
+    if (isCredit) {
+      currentBalance += item.amount;
+    } else {
+      currentBalance -= item.amount;
+    }
+
+    const nextTxId = txs.length > 0 ? Math.max(...txs.map((t) => t.id)) + 1 : 1;
+
+    txs.push({
+      id: nextTxId,
+      documentId: nextDocId,
+      sourceFile: "SBI_Statement_May2026.pdf",
+      transactionDate: txDate.toISOString().slice(0, 10),
+      postedDate: txDate.toISOString().slice(0, 10),
+      description: item.desc,
+      payee: item.payee,
+      reference: "TXN" + Math.floor(100000000 + Math.random() * 900000000),
+      category: item.name,
+      direction: item.dir as "credit" | "debit",
+      amount: item.amount,
+      balance: currentBalance,
+      currencyCode: "INR",
+      extractionConfidence: 98,
+      createdAt: txDate.toISOString()
+    });
+  }
+
+  saveStoredTransactions(txs);
+}
+
 // Call initialization instantly
 initializeMockData();
 
 // Client API Exports (localStorage bindings)
 export async function fetchDocuments(): Promise<{ documents: DocumentRecord[] }> {
   const userId = buildUserId();
+  seedUserMockData(userId);
   const docs = getStoredDocuments().filter((d) => d.userId === userId);
   
   // Calculate transactions count for each document dynamically
@@ -501,6 +573,7 @@ export async function deleteDocument(documentId: number): Promise<{ success: tru
 
 export async function fetchTransactions(): Promise<{ transactions: TransactionRecord[] }> {
   const userId = buildUserId();
+  seedUserMockData(userId);
   const docs = getStoredDocuments().filter((d) => d.userId === userId);
   const docIds = docs.map((d) => d.id);
   const txs = getStoredTransactions().filter((t) => docIds.includes(t.documentId));
@@ -751,53 +824,6 @@ const originalFetch = window.fetch;
 window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   const url = typeof input === "string" ? input : input.toString();
 
-  if (url.includes("/api/login")) {
-    const body = JSON.parse(init?.body as string || "{}");
-    const users = JSON.parse(localStorage.getItem("mock_users") || "[]");
-    const user = users.find((u: any) => u.email === body.email && u.password === body.password);
-    
-    if (user) {
-      return new Response(JSON.stringify({
-        token: "mock-jwt-token-xyz",
-        user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          phone: user.phone,
-          currency: user.currency,
-          profilePictureUrl: null
-        }
-      }), { status: 200, headers: { "Content-Type": "application/json" } });
-    } else {
-      return new Response(JSON.stringify({ message: "Invalid email or password." }), { status: 401, headers: { "Content-Type": "application/json" } });
-    }
-  }
-
-  if (url.includes("/api/signup")) {
-    const body = JSON.parse(init?.body as string || "{}");
-    const users = JSON.parse(localStorage.getItem("mock_users") || "[]");
-    
-    if (users.some((u: any) => u.email === body.email || u.username === body.username)) {
-      return new Response(JSON.stringify({ message: "Email or username already exists." }), { status: 409, headers: { "Content-Type": "application/json" } });
-    }
-    
-    const newUser = {
-      id: users.length + 1,
-      name: body.name,
-      username: body.username,
-      email: body.email,
-      password: body.password,
-      phone: body.phone,
-      currency: body.currency,
-      profile_picture_url: null,
-      created_at: new Date().toISOString()
-    };
-    
-    users.push(newUser);
-    localStorage.setItem("mock_users", JSON.stringify(users));
-    return new Response(JSON.stringify({ message: "User registered successfully.", userId: newUser.id }), { status: 201, headers: { "Content-Type": "application/json" } });
-  }
 
   if (url.includes("/api/users/upload")) {
     const body = JSON.parse(init?.body as string || "{}");
