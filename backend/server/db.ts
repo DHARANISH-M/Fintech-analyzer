@@ -8,11 +8,10 @@ const { Pool } = pg;
 
 // Establish database configuration
 const pool = new Pool({
-  host: process.env.PGHOST,
-  port: process.env.PGPORT ? parseInt(process.env.PGPORT, 10) : 5432,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 // Helper for running queries
