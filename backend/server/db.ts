@@ -7,12 +7,17 @@ dotenv.config();
 const { Pool } = pg;
 
 // Establish database configuration
-const pool = new Pool({
+const poolConfig: any = {
   connectionString: process.env.DATABASE_URL,
-  ssl: {
+};
+
+if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('localhost') && !process.env.DATABASE_URL.includes('127.0.0.1')) {
+  poolConfig.ssl = {
     rejectUnauthorized: false,
-  },
-});
+  };
+}
+
+const pool = new Pool(poolConfig);
 
 // Helper for running queries
 export const query = (text: string, params?: any[]) => pool.query(text, params);
