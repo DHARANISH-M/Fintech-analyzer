@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"vite --config frontend/vite.config.ts\"",
-    "dev:server": "tsx watch server/index.ts",
+    "dev:server": "tsx watch --ignore=\"frontend/**\" --ignore=\"*.config.*\" server/index.ts",
     "start:server": "tsx server/index.ts",
     "build": "vite build --config frontend/vite.config.ts",
     "format.fix": "prettier --write .",

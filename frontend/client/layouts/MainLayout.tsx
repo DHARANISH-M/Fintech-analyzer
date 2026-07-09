@@ -77,7 +77,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         {/* Scrollable page content */}
         <main className="flex-1 overflow-y-auto pb-6 px-4 md:px-8 pt-6">
-          <div className="max-w-[1200px] w-full mx-auto flex-1 flex flex-col">
+          <div className="w-full flex-1 flex flex-col">
             <AnimatePresence mode="wait">
               <motion.div
                 key={location.pathname}
