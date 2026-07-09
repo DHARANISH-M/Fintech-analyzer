@@ -29,12 +29,13 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./frontend/client/*"],
-      "@shared/*": ["./frontend/client/types/*"]
+      "@shared/*": ["./backend/shared/*"]
     }
   },
   "include": [
     "frontend/client/**/*",
-    "frontend/vite.config.ts"
+    "frontend/vite.config.ts",
+    "backend/shared/**/*"
   ],
   "exclude": ["node_modules", "dist"]
 }

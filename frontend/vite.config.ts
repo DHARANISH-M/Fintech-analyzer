@@ -30,7 +30,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
-      "@shared": path.resolve(__dirname, "./client/types"),
+      "@shared": path.resolve(__dirname, "../backend/shared"),
     },
   },
 });
