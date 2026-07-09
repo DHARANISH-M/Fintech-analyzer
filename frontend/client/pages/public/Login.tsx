@@ -31,6 +31,7 @@ export default function Login() {
       }
 
       localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('user_id', data.user?.id || '');
       localStorage.setItem('user_name', data.user?.name || 'User');
       localStorage.setItem('user_username', data.user?.username || '');
       localStorage.setItem('user_email', data.user?.email || '');

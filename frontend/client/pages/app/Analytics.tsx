@@ -652,7 +652,7 @@ export default function Analytics() {
   const documentComparison = filteredAnalytics?.documentComparison ?? [];
 
   return (
-    <div className="space-y-6 pb-8 font-sans max-w-[1600px] mx-auto px-4 sm:px-6">
+    <div className="space-y-6 pb-8 font-sans w-full">
       
       {/* Scaling volume warning */}
       {hasHighTransactionVolume && (

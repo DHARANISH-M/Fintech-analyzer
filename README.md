@@ -54,6 +54,8 @@ Important areas:
 
 ## Run Locally
 
+To start both the backend server (port 3000) and the frontend dev server concurrently, run:
+
 ```bash
 npm install
 npm run dev

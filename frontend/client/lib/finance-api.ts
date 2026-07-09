@@ -482,7 +482,7 @@ export function seedUserMockData(userId: string) {
   const dateStart = new Date(today);
   dateStart.setDate(today.getDate() - 30);
 
-  const nextDocId = docs.length > 0 ? Math.max(...docs.map((d) => d.id)) + 1 : 1;
+  const nextDocId = docs.length > 0 ? Math.max(...docs.map((d) => Number(d.id))) + 1 : 1;
 
   const doc1: DocumentRecord = {
     id: nextDocId,
@@ -518,7 +518,7 @@ export function seedUserMockData(userId: string) {
       currentBalance -= item.amount;
     }
 
-    const nextTxId = txs.length > 0 ? Math.max(...txs.map((t) => t.id)) + 1 : 1;
+    const nextTxId = txs.length > 0 ? Math.max(...txs.map((t) => Number(t.id))) + 1 : 1;
 
     txs.push({
       id: nextTxId,
@@ -542,152 +542,68 @@ export function seedUserMockData(userId: string) {
   saveStoredTransactions(txs);
 }
 
-// Call initialization instantly
-initializeMockData();
-
-// Client API Exports (localStorage bindings)
+// Client API Exports calling real backend REST endpoints
 export async function fetchDocuments(): Promise<{ documents: DocumentRecord[] }> {
-  const userId = buildUserId();
-  seedUserMockData(userId);
-  const docs = getStoredDocuments().filter((d) => d.userId === userId);
-  
-  // Calculate transactions count for each document dynamically
-  const txs = getStoredTransactions();
-  const docRecords = docs.map((d) => ({
-    ...d,
-    transactionCount: txs.filter((t) => t.documentId === d.id).length
-  }));
-
-  return { documents: docRecords };
+  const response = await fetch("/api/statements");
+  if (!response.ok) {
+    throw new Error("Failed to fetch documents from database.");
+  }
+  return response.json();
 }
 
-export async function deleteDocument(documentId: number): Promise<{ success: true }> {
-  const docs = getStoredDocuments().filter((d) => d.id !== documentId);
-  saveStoredDocuments(docs);
-
-  const txs = getStoredTransactions().filter((t) => t.documentId !== documentId);
-  saveStoredTransactions(txs);
-
-  return { success: true };
+export async function deleteDocument(documentId: number | string): Promise<{ success: true }> {
+  const response = await fetch(`/api/statements/${documentId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to delete statement from database.");
+  }
+  return response.json();
 }
 
 export async function fetchTransactions(): Promise<{ transactions: TransactionRecord[] }> {
-  const userId = buildUserId();
-  seedUserMockData(userId);
-  const docs = getStoredDocuments().filter((d) => d.userId === userId);
-  const docIds = docs.map((d) => d.id);
-  const txs = getStoredTransactions().filter((t) => docIds.includes(t.documentId));
-
-  const records = txs.map((t) => {
-    const doc = docs.find((d) => d.id === t.documentId);
-    return {
-      ...t,
-      sourceFile: doc ? doc.fileName : "Unknown.pdf"
-    };
-  });
-
-  return { transactions: records };
+  const response = await fetch("/api/transactions");
+  if (!response.ok) {
+    throw new Error("Failed to fetch transactions from database.");
+  }
+  return response.json();
 }
 
 export async function fetchDashboard(): Promise<DashboardResponse> {
-  const { documents } = await fetchDocuments();
-  const { transactions } = await fetchTransactions();
-
-  const metrics = buildMetrics(transactions, documents);
-  const monthlySeries = buildMonthlySeries(transactions);
-  const categoryBreakdown = buildCategoryBreakdown(transactions, "debit");
-  const topPayees = buildPayeeBreakdown(transactions);
-  const payeeLedger = buildPayeeLedger(transactions);
-  const recentTransactions = transactions.slice(0, 8);
-  const upcomingRecurring = buildRecurringTransactions(transactions)
-    .slice(0, 5)
-    .map((item, index) => ({
-      id: index + 1,
-      documentId: 0,
-      sourceFile: item.description,
-      transactionDate: item.lastSeenAt,
-      postedDate: null,
-      description: item.description,
-      payee: item.description,
-      reference: null,
-      category: item.category,
-      direction: "debit" as const,
-      amount: item.averageAmount,
-      balance: null,
-      currencyCode: "INR",
-      extractionConfidence: 100,
-      createdAt: new Date(item.lastSeenAt).toISOString(),
-    }));
-
-  return {
-    metrics,
-    monthlySeries,
-    categoryBreakdown,
-    topPayees: topPayees.map((tp) => ({
-      payee: tp.payee,
-      debit: tp.debit,
-      credit: tp.credit,
-      total: tp.total,
-      net: tp.net,
-      transactions: tp.transactions,
-      lastPaidAt: tp.lastPaidAt
-    })),
-    payeeLedger,
-    recentTransactions,
-    upcomingRecurring,
-  };
+  const response = await fetch("/api/dashboard");
+  if (!response.ok) {
+    throw new Error("Failed to fetch dashboard metrics.");
+  }
+  return response.json();
 }
 
 export async function fetchAnalytics(): Promise<AnalyticsResponse> {
-  const { documents } = await fetchDocuments();
-  const { transactions } = await fetchTransactions();
-
-  const metrics = buildMetrics(transactions, documents);
-  const monthlySeries = buildMonthlySeries(transactions);
-  const expenseCategories = buildCategoryBreakdown(transactions, "debit");
-  const incomeCategories = buildCategoryBreakdown(transactions, "credit");
-  const recurringTransactions = buildRecurringTransactions(transactions).slice(0, 10);
-  const payeeBreakdown = buildPayeeBreakdown(transactions);
-  
-  const documentComparison = documents.map((doc) => {
-    const docTxs = transactions.filter((t) => t.documentId === doc.id);
-    return {
-      fileName: doc.fileName,
-      income: docTxs.filter((t) => t.direction === "credit").reduce((sum, t) => sum + t.amount, 0),
-      expenses: docTxs.filter((t) => t.direction === "debit").reduce((sum, t) => sum + t.amount, 0),
-      transactionCount: docTxs.length,
-    };
-  });
-
-  return {
-    metrics,
-    monthlySeries,
-    expenseCategories,
-    incomeCategories,
-    recurringTransactions,
-    payeeBreakdown,
-    documentComparison,
-  };
+  const response = await fetch("/api/analytics");
+  if (!response.ok) {
+    throw new Error("Failed to fetch analytics from database.");
+  }
+  return response.json();
 }
 
 export async function fetchAlerts(): Promise<AlertsResponse> {
-  const { transactions } = await fetchTransactions();
-  return {
-    alerts: buildAlerts(transactions),
-  };
+  const response = await fetch("/api/alerts");
+  if (!response.ok) {
+    throw new Error("Failed to fetch alerts from database.");
+  }
+  return response.json();
 }
 
-// Dynamic Client-side Excel Spreadsheet Generation
-export async function downloadDocumentSpreadsheet(documentId: number, fileName: string) {
-  const docs = getStoredDocuments();
-  const doc = docs.find((d) => d.id === documentId);
+// Dynamic Client-side Excel Spreadsheet Generation using live database records
+export async function downloadDocumentSpreadsheet(documentId: number | string, fileName: string) {
+  const { documents } = await fetchDocuments();
+  const doc = documents.find((d) => d.id === documentId);
   if (!doc) {
     alert("Document not found");
     return;
   }
 
-  const txs = getStoredTransactions();
-  const documentTransactions = txs
+  const { transactions } = await fetchTransactions();
+  const documentTransactions = transactions
     .filter((t) => t.documentId === documentId)
     .sort((a, b) => a.transactionDate.localeCompare(b.transactionDate));
 
@@ -819,48 +735,47 @@ export async function downloadDocumentSpreadsheet(documentId: number, fileName: 
   window.URL.revokeObjectURL(url);
 }
 
-// Intercept Global fetch calls for login, signup and upload endpoints
+// Intercept Global fetch calls to automatically inject JWT authentication headers and handle authorization redirects
 const originalFetch = window.fetch;
 window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   const url = typeof input === "string" ? input : input.toString();
 
+  // Inject Authorization Token for all requests to backend APIs
+  if (url.includes("/api/") && !url.includes("/api/login") && !url.includes("/api/signup") && !url.includes("/api/health")) {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      console.warn("No auth token found. Redirecting to login.");
+      // Redirect to login page
+      if (!window.location.pathname.includes("/login")) {
+        window.location.href = "/enhanced/login";
+      }
+      return new Response(JSON.stringify({ message: "Unauthorized: Missing token." }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-  if (url.includes("/api/users/upload")) {
-    const body = JSON.parse(init?.body as string || "{}");
-    const userId = body.userId || "guest";
-    const fileName = body.fileName || "statement.pdf";
-    const fileSize = body.fileSize || 0;
+    const newInit = { ...init };
+    const headers = new Headers(newInit.headers || {});
+    if (!headers.has("Authorization")) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+    newInit.headers = headers;
 
-    const docs = getStoredDocuments();
-    const newDoc: DocumentRecord = {
-      id: docs.length + 1,
-      userId,
-      fileName,
-      fileType: body.fileType || "application/pdf",
-      fileSize,
-      s3Key: `users/${userId}/documents/${Date.now()}_${fileName}`,
-      publicUrl: "#",
-      uploadedAt: new Date().toISOString(),
-      extractionStatus: "completed",
-      extractionError: null,
-      statementStartDate: new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString().slice(0, 10),
-      statementEndDate: new Date().toISOString().slice(0, 10),
-      transactionCount: 26
-    };
-
-    docs.push(newDoc);
-    saveStoredDocuments(docs);
-
-    const mockTxs = generateMockTransactionsList(newDoc.id, userId, fileName);
-    const txs = getStoredTransactions();
-    txs.push(...mockTxs);
-    saveStoredTransactions(txs);
-
-    return new Response(JSON.stringify({
-      key: newDoc.s3Key,
-      publicUrl: newDoc.publicUrl,
-      document: newDoc
-    }), { status: 200, headers: { "Content-Type": "application/json" } });
+    try {
+      const response = await originalFetch(input, newInit);
+      if (response.status === 401) {
+        console.warn("Token expired or invalid (401). Redirecting to login.");
+        localStorage.removeItem("auth_token");
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/enhanced/login";
+        }
+      }
+      return response;
+    } catch (fetchErr) {
+      console.error("Network error during API call:", fetchErr);
+      throw fetchErr;
+    }
   }
 
   return originalFetch(input, init);

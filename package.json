@@ -11,7 +11,7 @@
     ]
   },
   "scripts": {
-    "dev": "vite --config frontend/vite.config.ts",
+    "dev": "concurrently \"npm run dev:server\" \"vite --config frontend/vite.config.ts\"",
     "dev:server": "tsx watch server/index.ts",
     "start:server": "tsx server/index.ts",
     "build": "vite build --config frontend/vite.config.ts",
@@ -83,6 +83,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "concurrently": "^10.0.3",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",

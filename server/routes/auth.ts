@@ -96,6 +96,12 @@ router.post('/login', (async (req: Request, res: Response) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        // username: derive from email prefix as a sensible default
+        username: user.email.split('@')[0],
+        // phone and currency not stored yet — return empty defaults so
+        // the frontend doesn't break when reading from localStorage
+        phone: '',
+        currency: '₹',
         profilePictureUrl: null,
       },
     });

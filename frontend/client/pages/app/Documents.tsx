@@ -36,7 +36,7 @@ export default function Documents() {
   const [documents, setDocuments] = useState<DocumentRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<string | number | null>(null);
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -85,7 +85,7 @@ export default function Documents() {
         fileContentBase64: await fileToBase64(file),
       };
 
-      const response = await fetch(`${(import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "")}/api/users/upload`, {
+      const response = await fetch(`/api/users/upload`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

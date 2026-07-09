@@ -5,7 +5,7 @@ export interface DemoResponse {
 export type ExtractionStatus = "uploaded" | "processing" | "completed" | "failed";
 
 export interface DocumentRecord {
-  id: number;
+  id: string | number;
   userId: string;
   fileName: string;
   fileType: string;
@@ -21,8 +21,8 @@ export interface DocumentRecord {
 }
 
 export interface TransactionRecord {
-  id: number;
-  documentId: number;
+  id: string | number;
+  documentId: string | number;
   sourceFile: string;
   transactionDate: string;
   postedDate?: string | null;

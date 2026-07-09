@@ -11,6 +11,15 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:3000",
         changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on("error", (err) => {
+            console.error(
+              "\n[vite-proxy] ❌ Cannot reach Express backend at http://localhost:3000\n" +
+              "  → Make sure 'npm run dev:server' is running.\n" +
+              "  → Error:", err.message
+            );
+          });
+        },
       },
     },
   },
