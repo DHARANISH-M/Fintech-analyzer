@@ -11,6 +11,8 @@ import {
 } from "@shared/api";
 import ExcelJS from "exceljs";
 
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+
 // Mock Categories configuration
 const mockCategories = [
   { name: "Rent & Utilities", payee: "BESCOM Electricity", desc: "BESCOM BILL PAY", amount: 2450, dir: "debit" },
@@ -544,7 +546,7 @@ export function seedUserMockData(userId: string) {
 
 // Client API Exports calling real backend REST endpoints
 export async function fetchDocuments(): Promise<{ documents: DocumentRecord[] }> {
-  const response = await fetch("/api/statements");
+  const response = await fetch(`${API_BASE_URL}/api/statements`);
   if (!response.ok) {
     throw new Error("Failed to fetch documents from database.");
   }
@@ -552,7 +554,7 @@ export async function fetchDocuments(): Promise<{ documents: DocumentRecord[] }>
 }
 
 export async function deleteDocument(documentId: number | string): Promise<{ success: true }> {
-  const response = await fetch(`/api/statements/${documentId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/statements/${documentId}`, {
     method: "DELETE",
   });
   if (!response.ok) {
@@ -562,7 +564,7 @@ export async function deleteDocument(documentId: number | string): Promise<{ suc
 }
 
 export async function fetchTransactions(): Promise<{ transactions: TransactionRecord[] }> {
-  const response = await fetch("/api/transactions");
+  const response = await fetch(`${API_BASE_URL}/api/transactions`);
   if (!response.ok) {
     throw new Error("Failed to fetch transactions from database.");
   }
@@ -570,7 +572,7 @@ export async function fetchTransactions(): Promise<{ transactions: TransactionRe
 }
 
 export async function fetchDashboard(): Promise<DashboardResponse> {
-  const response = await fetch("/api/dashboard");
+  const response = await fetch(`${API_BASE_URL}/api/dashboard`);
   if (!response.ok) {
     throw new Error("Failed to fetch dashboard metrics.");
   }
@@ -578,7 +580,7 @@ export async function fetchDashboard(): Promise<DashboardResponse> {
 }
 
 export async function fetchAnalytics(): Promise<AnalyticsResponse> {
-  const response = await fetch("/api/analytics");
+  const response = await fetch(`${API_BASE_URL}/api/analytics`);
   if (!response.ok) {
     throw new Error("Failed to fetch analytics from database.");
   }
@@ -586,7 +588,7 @@ export async function fetchAnalytics(): Promise<AnalyticsResponse> {
 }
 
 export async function fetchAlerts(): Promise<AlertsResponse> {
-  const response = await fetch("/api/alerts");
+  const response = await fetch(`${API_BASE_URL}/api/alerts`);
   if (!response.ok) {
     throw new Error("Failed to fetch alerts from database.");
   }

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Download, FileText, Loader2, ShieldCheck, Trash2, UploadCloud } from "lucide-react";
 
 import { DocumentRecord } from "@shared/api";
-import { buildUserId, deleteDocument, fetchDocuments, downloadDocumentSpreadsheet } from "@/lib/finance-api";
+import { buildUserId, deleteDocument, fetchDocuments, downloadDocumentSpreadsheet, API_BASE_URL } from "@/lib/finance-api";
 import Loader from "@/components/Loader";
 
 function formatSize(bytes: number) {
@@ -85,7 +85,7 @@ export default function Documents() {
         fileContentBase64: await fileToBase64(file),
       };
 
-      const response = await fetch(`/api/users/upload`, {
+      const response = await fetch(`${API_BASE_URL}/api/users/upload`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
